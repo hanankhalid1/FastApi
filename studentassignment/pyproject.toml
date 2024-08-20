@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "students"
+version = "0.1.0"
+description = ""
+authors = ["hanankhalid1 <hanankhalid1434@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.112.1"
+sqlmodel = "^0.0.21"
+uvicorn = "^0.30.6"
+standard = "^1.0.3"
+
+
+[tool.poetry.scripts]
+dev = "students.main:start"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
