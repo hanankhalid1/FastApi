@@ -34,6 +34,47 @@ def get_single_student():
         result = session.exec(statement)
         print(result)
         return result.all()
+    
+@app.post("/addStudents")
+def add_students():
+    student1 = Students(id = 3 , name = "Umer" , rollNo = "42")
+    student2 = Students(id = 4 , name = "Haroon" , rollNo = "12")
+    
+    session  = Session(connection)
+    session.add(student1)
+    session.add(student2)
+    session.commit()
+    return "Data added successfuly"
+
+@app.post("/postStudents")
+def post_students(id : int , name : str , rollNo : str):
+    student = Students(id = id , name = name , rollNo = rollNo)
+    session = Session(connection)
+    session.add(student)
+    session.commit()
+    return "Data added successfully by query param"
+
+@app.put("/updateStudents")
+def update_students( id : int , name : str):
+    with Session(connection) as session:
+        statement = select(Students).where(Students.id ==id )
+        result = session.exec(statement)
+        updatedStudent = result.one()
+        updatedStudent.name = name
+        session.add(updatedStudent)
+        session.commit()
+        print(updatedStudent)
+        return "Data updated successfully"
+    
+@app.delete("/deleteStudents")
+def delete_students(id : int):
+    with Session(connection) as session:
+        statement = select(Students).where(Students.id == id)
+        result = session.exec(statement)
+        student = result.one()
+        session.delete(student)
+        session.commit()
+        return "Data deleted successfully"
 
     
 
