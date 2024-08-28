@@ -1,11 +1,11 @@
 from sqlmodel import Field, SQLModel
+from typing import Optional
 
 class Todo(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     title: str
     description: str
-    completed: bool
-
+    completed: bool = False
 class UpdateTodo(SQLModel):
    title : str | None
    description : str | None    

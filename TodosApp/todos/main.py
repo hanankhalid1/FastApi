@@ -1,5 +1,6 @@
 from http.client import HTTPException
 from fastapi import FastAPI  
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn 
 from .config.db import create_tables , engine
 from sqlmodel import Session  , select 
@@ -8,6 +9,16 @@ from dotenv import load_dotenv
 
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/getTodos")
 def getTodos():
@@ -30,11 +41,11 @@ def addTodo(todo : Todo):
 @app.put("/updateTodo/{id}")
 def update_todo(id: int, todo: UpdateTodo):
     with Session(engine) as session:
-        todo_db = session.get(Todo, id)  # Use the 'id' from the URL
+        todo_db = session.get(Todo, id)  
         if not todo_db:
             raise HTTPException(status_code=404, detail="Todo not found")
 
-        todo_data = todo.model_dump(exclude_unset=True)  # Corrected typo
+        todo_data = todo.model_dump(exclude_unset=True)  
 
         for key, value in todo_data.items():
             setattr(todo_db, key, value)
@@ -53,7 +64,6 @@ def delete_todo(id: int):
         session.delete(todo)
         session.commit()
         return {"message": "Todo deleted successfully"}
-
 
 
 
